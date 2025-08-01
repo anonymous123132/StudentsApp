@@ -1,18 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
   const calendarEl = document.getElementById('calendar');
-  const modal = document.getElementById('eventModal');
+  const modalEl = document.getElementById('eventModal');
+  const modal = new bootstrap.Modal(modalEl);
+
   const titleInput = document.getElementById('eventTitle');
   const startInput = document.getElementById('eventStart');
   const endInput = document.getElementById('eventEnd');
   const descInput = document.getElementById('eventDesc');
   const colorInput = document.getElementById('eventColor');
   const saveBtn = document.getElementById('saveEvent');
-  const cancelBtn = document.getElementById('cancelEvent');
   const deleteBtn = document.getElementById('deleteEvent');
 
   let selectedEvent = null;
+  let isAllDay = false;
 
   const calendar = new FullCalendar.Calendar(calendarEl, {
+    themeSystem: 'bootstrap5',
     initialView: 'dayGridMonth',
     headerToolbar: {
       start: 'prev,next today',
@@ -21,9 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     selectable: true,
     editable: true,
-    select: info => openModal(info.startStr, info.endStr),
+    select: info => {
+      isAllDay = info.allDay;
+      openModal(info.startStr, info.endStr);
+    },
     eventClick: info => {
       selectedEvent = info.event;
+      isAllDay = info.event.allDay;
       openModal(
         info.event.startStr,
         info.event.endStr,
@@ -43,18 +50,20 @@ document.addEventListener('DOMContentLoaded', () => {
     endInput.value = end ? end.substring(0, 16) : start.substring(0, 16);
     descInput.value = desc;
     colorInput.value = color;
-    modal.style.display = 'flex';
+    modal.show();
   }
 
-  function closeModal() {
-    modal.style.display = 'none';
+  function resetForm() {
     titleInput.value = '';
     startInput.value = '';
     endInput.value = '';
     descInput.value = '';
     colorInput.value = '#3788d8';
     selectedEvent = null;
+    isAllDay = false;
   }
+
+  modalEl.addEventListener('hidden.bs.modal', resetForm);
 
   saveBtn.addEventListener('click', () => {
     const title = titleInput.value.trim();
@@ -69,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
       selectedEvent.setProp('title', title);
       selectedEvent.setStart(start);
       selectedEvent.setEnd(end);
+      selectedEvent.setAllDay(isAllDay);
       selectedEvent.setExtendedProp('description', desc);
       selectedEvent.setProp('backgroundColor', color);
       selectedEvent.setProp('borderColor', color);
@@ -78,65 +88,66 @@ document.addEventListener('DOMContentLoaded', () => {
         title,
         start,
         end,
+        allDay: isAllDay,
         description: desc,
         backgroundColor: color,
         borderColor: color
       });
       persistEvent(newEvent);
     }
-    closeModal();
+    modal.hide();
   });
 
-  cancelBtn.addEventListener('click', closeModal);
-
   deleteBtn.addEventListener('click', () => {
-      if (selectedEvent) {
-        selectedEvent.remove();
-        removeEvent(selectedEvent);
-        closeModal();
-      }
-    });
+    if (selectedEvent) {
+      selectedEvent.remove();
+      removeEvent(selectedEvent);
+      modal.hide();
+    }
+  });
 
   function loadEvents() {
-      try {
-        return JSON.parse(localStorage.getItem('calendarEvents') || '[]').map(e => ({
-          ...e,
-          backgroundColor: e.color,
-          borderColor: e.color
-        }));
-      } catch {
-        return [];
-      }
+    try {
+      return JSON.parse(localStorage.getItem('calendarEvents') || '[]').map(e => ({
+        ...e,
+        backgroundColor: e.color,
+        borderColor: e.color
+      }));
+    } catch {
+      return [];
     }
+  }
 
-    function persistEvent(event) {
-      const events = loadEvents();
-      events.push({
-        id: event.id,
-        title: event.title,
-        start: event.startStr,
-        end: event.endStr,
-        description: event.extendedProps.description || '',
-        color: event.backgroundColor
-      });
-      localStorage.setItem('calendarEvents', JSON.stringify(events));
-    }
+  function persistEvent(event) {
+    const events = loadEvents();
+    events.push({
+      id: event.id,
+      title: event.title,
+      start: event.startStr,
+      end: event.endStr,
+      allDay: event.allDay,
+      description: event.extendedProps.description || '',
+      color: event.backgroundColor
+    });
+    localStorage.setItem('calendarEvents', JSON.stringify(events));
+  }
 
   function updateEvent(event) {
-      const events = loadEvents().map(e =>
-        e.id === event.id
-          ? {
-              id: event.id,
-              title: event.title,
-              start: event.startStr,
-              end: event.endStr,
-              description: event.extendedProps.description || '',
-              color: event.backgroundColor
-            }
-          : e
-      );
-      localStorage.setItem('calendarEvents', JSON.stringify(events));
-    }
+    const events = loadEvents().map(e =>
+      e.id === event.id
+        ? {
+            id: event.id,
+            title: event.title,
+            start: event.startStr,
+            end: event.endStr,
+            allDay: event.allDay,
+            description: event.extendedProps.description || '',
+            color: event.backgroundColor
+          }
+        : e
+    );
+    localStorage.setItem('calendarEvents', JSON.stringify(events));
+  }
 
   function removeEvent(event) {
     const events = loadEvents().filter(e => e.id !== event.id);
