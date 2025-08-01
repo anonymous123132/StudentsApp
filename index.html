@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Calendar</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="calendar"></div>
+
+  <div id="eventModal" class="modal">
+    <div class="modal-content">
+      <label>Title: <input type="text" id="eventTitle" /></label>
+      <label>Start: <input type="datetime-local" id="eventStart" /></label>
+      <label>End: <input type="datetime-local" id="eventEnd" /></label>
+      <label>Description: <textarea id="eventDesc"></textarea></label>
+      <label>Color: <input type="color" id="eventColor" value="#3788d8" /></label>
+      <div class="modal-actions">
+        <button id="deleteEvent">Delete</button>
+        <button id="saveEvent">Save</button>
+        <button id="cancelEvent">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
