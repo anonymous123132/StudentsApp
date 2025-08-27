@@ -7,14 +7,60 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div id="calendar"></div>
+  <button id="openSettings">Settings</button>
+  <input type="text" id="searchEvents" placeholder="Search events" />
+  <select id="filterCategory"></select>
+  <input type="date" id="jumpDate" />
+  <button id="goToDate">Go</button>
+  <div id="calendarFilters">
+    <label><input type="checkbox" class="calendarFilter" value="Personal" checked /> Personal</label>
+    <label><input type="checkbox" class="calendarFilter" value="Work" checked /> Work</label>
+    <label><input type="checkbox" class="calendarFilter" value="Study" checked /> Study</label>
+  </div>
+  <button id="importIcs">Import ICS</button>
+    <button id="exportIcs">Export ICS</button>
+    <button id="shareIcs">Share ICS</button>
+    <button id="quickStudy">Quick Study</button>
+    <input type="file" id="icsFile" accept=".ics" style="display:none" />
+    <div id="calendar"></div>
 
   <div id="eventModal" class="modal">
     <div class="modal-content">
       <label>Title: <input type="text" id="eventTitle" /></label>
       <label>Start: <input type="datetime-local" id="eventStart" /></label>
       <label>End: <input type="datetime-local" id="eventEnd" /></label>
+      <label><input type="checkbox" id="eventAllDay" /> All Day</label>
       <label>Description: <textarea id="eventDesc"></textarea></label>
+      <label>Destination:
+        <select id="eventDestination"></select>
+      </label>
+      <label>Location: <input type="text" id="eventLocation" /></label>
+      <a id="eventMapLink" href="#" target="_blank" style="display:none">Open Map</a>
+      <label>Latitude: <input type="number" step="any" id="eventLat" /></label>
+      <label>Longitude: <input type="number" step="any" id="eventLng" /></label>
+      <label><input type="checkbox" id="smartTravel" /> Smart travel reminder</label>
+      <label>Online Link: <input type="url" id="eventOnlineLink" /></label>
+      <label>Attachments (URLs, comma-separated): <input type="text" id="eventAttachments" /></label>
+      <label>Time Zone: <select id="eventTimeZone"></select></label>
+      <div id="participantsContainer">
+        <h4>Participants</h4>
+        <ul id="participantsList"></ul>
+        <button type="button" id="addParticipant">Add Participant</button>
+      </div>
+      <label>Calendar: <select id="eventCalendar">
+        <option value="Personal">Personal</option>
+        <option value="Work">Work</option>
+        <option value="Study">Study</option>
+      </select></label>
+      <label>Category: <select id="eventCategory"></select></label>
+      <label>Reminders (minutes before, comma-separated): <input type="text" id="eventReminders" /></label>
+      <label>Repeat: <select id="eventRecurrence">
+        <option value="none">None</option>
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+        <option value="yearly">Yearly</option>
+      </select></label>
       <label>Color: <input type="color" id="eventColor" value="#3788d8" /></label>
       <div class="modal-actions">
         <button id="deleteEvent">Delete</button>
@@ -24,7 +70,126 @@
     </div>
   </div>
 
+  <div id="settingsModal" class="modal">
+    <div class="modal-content">
+      <h3>Categories</h3>
+      <ul id="categoryList"></ul>
+      <div>
+        <input type="text" id="newCategoryName" placeholder="Category name" />
+        <input type="color" id="newCategoryColor" value="#3788d8" />
+        <button id="addCategory">Add</button>
+      </div>
+      <h3>Profile</h3>
+      <label>Home Latitude: <input type="number" step="any" id="homeLat" /></label>
+      <label>Home Longitude: <input type="number" step="any" id="homeLng" /></label>
+      <label>Travel Mode:
+        <select id="travelMode">
+          <option value="car">Car</option>
+          <option value="transit">Transit</option>
+          <option value="walk">Walk</option>
+          <option value="bike">Bike</option>
+        </select>
+      </label>
+      <label>Buffer (minutes): <input type="number" id="travelBuffer" /></label>
+      <label>Travel Provider:
+        <select id="travelProvider">
+          <option value="google">Google</option>
+          <option value="osrm">OSRM</option>
+        </select>
+      </label>
+      <label>Travel Policy:
+        <select id="travelPolicy">
+          <option value="event">Separate Event</option>
+          <option value="extend">Extend Event</option>
+        </select>
+      </label>
+      <h4>Saved Destinations</h4>
+      <ul id="destinationsList"></ul>
+      <div>
+        <input type="text" id="destName" placeholder="Name" />
+        <input type="number" step="any" id="destLat" placeholder="Lat" />
+        <input type="number" step="any" id="destLng" placeholder="Lng" />
+        <button id="addDestination">Add</button>
+      </div>
+      <h4>Travel Preview</h4>
+      <ul id="travelPreview"></ul>
+      <h3>Courses</h3>
+      <div id="courseCards"></div>
+      <button id="addCourse">Add Course</button>
+      <label><input type="checkbox" id="dndMode" /> Do Not Disturb</label>
+      <h3>App Lock</h3>
+      <input type="password" id="appLockPin" placeholder="PIN" />
+      <button id="savePin">Save PIN</button>
+      <button id="clearPin">Clear PIN</button>
+      <h3>Backup</h3>
+      <button id="backupData">Backup</button>
+      <button id="restoreData">Restore</button>
+      <input type="file" id="backupFile" accept="application/json" style="display:none" />
+      <div class="modal-actions">
+        <button id="closeSettings">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="courseModal" class="modal">
+    <div class="modal-content">
+      <div class="courseStep" data-step="1">
+        <label>Course Name: <input type="text" id="courseName" /></label>
+        <label>Course Code: <input type="text" id="courseCode" /></label>
+        <label>Semester:
+          <select id="courseSemester">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="Summer">Summer</option>
+          </select>
+        </label>
+        <label>Color: <input type="color" id="courseColor" value="#3788d8" /></label>
+      </div>
+      <div class="courseStep" data-step="2" style="display:none">
+        <h4>Meetings</h4>
+        <div id="meetingsContainer"></div>
+        <button type="button" id="addMeeting">Add Meeting</button>
+      </div>
+      <div class="courseStep" data-step="3" style="display:none">
+        <h4>Assignments</h4>
+        <div id="assignmentsContainer"></div>
+        <button type="button" id="addAssignment">Add Assignment</button>
+        <h4>Topics</h4>
+        <div id="topicsContainer"></div>
+        <button type="button" id="addTopic">Add Topic</button>
+      </div>
+      <div class="modal-actions">
+        <button id="prevCourseStep">Back</button>
+        <button id="nextCourseStep">Next</button>
+        <button id="saveCourse" style="display:none">Save</button>
+        <button id="cancelCourse">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="courseDetailModal" class="modal">
+    <div class="modal-content">
+      <div id="courseDetailTabs">
+        <button data-section="details">Details</button>
+        <button data-section="meetings">Meetings</button>
+        <button data-section="assignments">Assignments</button>
+        <button data-section="exams">Exams</button>
+        <button data-section="topics">Topics</button>
+        <button data-section="rules">Rules</button>
+      </div>
+      <div class="courseDetailSection" data-section="details"></div>
+      <div class="courseDetailSection" data-section="meetings" style="display:none"></div>
+      <div class="courseDetailSection" data-section="assignments" style="display:none"></div>
+      <div class="courseDetailSection" data-section="exams" style="display:none"></div>
+      <div class="courseDetailSection" data-section="topics" style="display:none"></div>
+      <div class="courseDetailSection" data-section="rules" style="display:none"></div>
+      <div class="modal-actions">
+        <button id="closeCourseDetail">Close</button>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
-  <script src="script.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
