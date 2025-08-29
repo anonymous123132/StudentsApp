@@ -3,8 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <title>Student Calendar</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" />
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Basic FullCalendar CSS to ensure it renders properly */
+    .fc {
+      direction: ltr;
+      text-align: left;
+    }
+    .fc table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      font-size: 1em;
+    }
+    .fc th, .fc td {
+      border: 1px solid #ddd;
+      padding: 0;
+      vertical-align: top;
+    }
+    .fc-header-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1em;
+    }
+    .fc-event {
+      cursor: pointer;
+      background-color: #3788d8;
+      border: 1px solid #3788d8;
+      color: white;
+      border-radius: 3px;
+      padding: 2px 4px;
+      margin: 1px;
+    }
+  </style>
 </head>
 <body>
   <div id="calendar"></div>
@@ -24,7 +55,10 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script src="node_modules/@fullcalendar/core/index.global.min.js"></script>
+  <script src="node_modules/@fullcalendar/daygrid/index.global.min.js"></script>
+  <script src="node_modules/@fullcalendar/timegrid/index.global.min.js"></script>
+  <script src="node_modules/@fullcalendar/interaction/index.global.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
