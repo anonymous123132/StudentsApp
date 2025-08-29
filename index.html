@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Student Calendar</title>
+  <title>StudentsApp - Advanced Calendar for Students</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
     /* Basic FullCalendar CSS to ensure it renders properly */
@@ -35,11 +35,60 @@
       padding: 2px 4px;
       margin: 1px;
     }
+    
+    /* StudentsApp enhancements */
+    .app-header {
+      background: #2c3e50;
+      color: white;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .app-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .toolbar {
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .toolbar button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      background: #3498db;
+      color: white;
+      cursor: pointer;
+    }
+    .toolbar button:hover {
+      background: #2980b9;
+    }
+    .study-section {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 4px;
+      margin: 1rem 0;
+    }
   </style>
 </head>
 <body>
+  <header class="app-header">
+    <h1>StudentsApp</h1>
+    <p>Advanced Calendar for Students with Study Planning & Task Management</p>
+  </header>
+
+  <div class="toolbar">
+    <button id="quickStudyBtn">Quick Study Blocks</button>
+    <button id="addCourseBtn">Add Course</button>
+    <button id="addTaskBtn">Add Task</button>
+    <button id="viewCoursesBtn">View Courses</button>
+  </div>
+
   <div id="calendar"></div>
 
+  <!-- Original Event Modal -->
   <div id="eventModal" class="modal">
     <div class="modal-content">
       <label>Title: <input type="text" id="eventTitle" /></label>
@@ -55,10 +104,60 @@
     </div>
   </div>
 
+  <!-- Course Modal -->
+  <div id="courseModal" class="modal">
+    <div class="modal-content">
+      <h3>Add Course</h3>
+      <label>Name: <input type="text" id="courseName" /></label>
+      <label>Code: <input type="text" id="courseCode" /></label>
+      <label>Semester: <input type="text" id="courseSemester" /></label>
+      <label>Color: <input type="color" id="courseColor" value="#3788d8" /></label>
+      <div class="modal-actions">
+        <button id="saveCourse">Save Course</button>
+        <button id="cancelCourse">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Task Modal -->
+  <div id="taskModal" class="modal">
+    <div class="modal-content">
+      <h3>Add Task</h3>
+      <label>Title: <input type="text" id="taskTitle" /></label>
+      <label>Type: 
+        <select id="taskType">
+          <option value="homework">Homework</option>
+          <option value="project">Project</option>
+          <option value="lab">Lab</option>
+          <option value="quiz">Quiz</option>
+          <option value="exam">Exam</option>
+        </select>
+      </label>
+      <label>Due Date: <input type="datetime-local" id="taskDue" /></label>
+      <label>Effort Estimate (minutes): <input type="number" id="taskEffort" /></label>
+      <label><input type="checkbox" id="taskIncludeStudy" /> Include in study planning</label>
+      <div class="modal-actions">
+        <button id="saveTask">Save Task</button>
+        <button id="cancelTask">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Courses List Modal -->
+  <div id="coursesModal" class="modal">
+    <div class="modal-content">
+      <h3>Courses & Tasks</h3>
+      <div id="coursesList"></div>
+      <div class="modal-actions">
+        <button id="closeCourses">Close</button>
+      </div>
+    </div>
+  </div>
+
   <script src="node_modules/@fullcalendar/core/index.global.min.js"></script>
   <script src="node_modules/@fullcalendar/daygrid/index.global.min.js"></script>
   <script src="node_modules/@fullcalendar/timegrid/index.global.min.js"></script>
   <script src="node_modules/@fullcalendar/interaction/index.global.min.js"></script>
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
