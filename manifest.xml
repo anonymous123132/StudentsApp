@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="MailApp">
+  <Id>0f8fad5b-d9cb-469f-a165-70867728950e</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Example</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="Category Time Tracker"/>
+  <Description DefaultValue="Tracks time spent per Outlook category"/>
+  <IconUrl DefaultValue="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/B8AAwMB/6M4R9AAAAAASUVORK5CYII="/>
+  <SupportUrl DefaultValue="https://example.com"/>
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="http://localhost:5500/addin/taskpane.html"/>
+    <RequestedHeight>250</RequestedHeight>
+  </DefaultSettings>
+  <Permissions>ReadWriteMailbox</Permissions>
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/>
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/>
+  </Rule>
+</OfficeApp>
