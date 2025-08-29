@@ -2,12 +2,19 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch Chrome against localhost",
-      "type": "pwa-chrome",
+      "name": "Start Outlook Add-in",
+      "type": "pwa-edge",
       "request": "launch",
-      "url": "http://localhost:5500",
-      "webRoot": "${workspaceFolder}",
-      "preLaunchTask": "Start dev server"
+      "url": "http://localhost:5500/addin/taskpane.html",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "npm start",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["start"],
+      "console": "integratedTerminal"
     }
   ]
 }
