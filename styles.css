@@ -8,3 +8,14 @@ body { font-family: sans-serif; }
 .modal-content input[type="color"],
 .modal-content textarea { width: 100%; box-sizing: border-box; }
 .modal-actions { margin-top: 10px; text-align: right; }
+
+.courseCard {
+  padding: 6px;
+  margin: 4px 0;
+  cursor: pointer;
+}
+
+.hebrew-date {
+  font-size: 0.7em;
+  color: #666;
+}

@@ -6,7 +6,26 @@
       "type": "npm",
       "script": "start",
       "isBackground": true,
-      "problemMatcher": []
+      "problemMatcher": {
+        "pattern": [
+          {
+            "regexp": ".",
+            "file": 1,
+            "location": 2,
+            "message": 3
+          }
+        ],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Serving",
+          "endsPattern": "Ready for changes"
+        }
+      }
+    },
+    {
+      "label": "Run tests",
+      "type": "npm",
+      "script": "test"
     }
   ]
 }
